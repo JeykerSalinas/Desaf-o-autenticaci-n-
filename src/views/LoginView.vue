@@ -34,7 +34,6 @@
             </div>
             <div class="col-12">
               <button class="btn btn-info" @click="login">Ingresar</button>
-              <button class="btn btn-info" @click="logout">Logout</button>
             </div>
           </div>
         </div>
@@ -43,42 +42,23 @@
   </div>
 </template>
 <script>
-import router from "@/router";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { mapActions } from "vuex";
 export default {
   name: "LoginView",
   data() {
     return {
       loggedin: false,
-      email: "",
-      password: "",
+      email: "prueba@gmail.com",
+      password: "123456",
     };
   },
   methods: {
-    async login() {
-      const email = this.email;
-      const password = this.password;
-      const auth = getAuth();
-
-      try {
-        const userCredencial = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const user = userCredencial.user;
-        console.log(userCredencial, user);
-      } catch (error) {
-        console.error;
-      }
-
-      // localStorage.setItem("loggedIn", true);
-      // console.log(localStorage.getItem("loggedIn"));
-      // router.push("/");
-    },
-    logout() {
-      localStorage.removeItem("loggedIn");
-      router.push("/login");
+    ...mapActions(["loginFirebase"]),
+    login() {
+      this.loginFirebase({
+        email: this.email,
+        password: this.password,
+      });
     },
   },
 };

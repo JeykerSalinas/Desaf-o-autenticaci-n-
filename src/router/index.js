@@ -26,10 +26,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem("loggedIn");
-  console.log(isAuthenticated);
+  const isAuthenticated = localStorage.getItem("loggin");
   if (to.name !== "login" && !isAuthenticated) next({ name: "login" });
-  // else if (to.name === "login" && isAuthenticated) next({ name: "home" });
+  else if (to.name === "login" && isAuthenticated) next({ name: "home" });
   else next();
 });
 
