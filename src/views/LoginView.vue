@@ -14,6 +14,7 @@
                 class="form-control"
                 id="staticEmail"
                 placeholder="email@example.com"
+                v-model="email"
               />
             </div>
           </div>
@@ -24,10 +25,16 @@
               >Password</label
             >
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="inputPassword" />
+              <input
+                type="password"
+                class="form-control"
+                id="inputPassword"
+                v-model="password"
+              />
             </div>
             <div class="col-12">
               <button class="btn btn-info" @click="login">Ingresar</button>
+              <button class="btn btn-info" @click="logout">Logout</button>
             </div>
           </div>
         </div>
@@ -37,17 +44,41 @@
 </template>
 <script>
 import router from "@/router";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 export default {
   name: "LoginView",
   data() {
     return {
       loggedin: false,
+      email: "",
+      password: "",
     };
   },
   methods: {
-    login() {
-      localStorage.setItem("loggedIn", false);
-      router.push("/");
+    async login() {
+      const email = this.email;
+      const password = this.password;
+      const auth = getAuth();
+
+      try {
+        const userCredencial = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredencial.user;
+        console.log(userCredencial, user);
+      } catch (error) {
+        console.error;
+      }
+
+      // localStorage.setItem("loggedIn", true);
+      // console.log(localStorage.getItem("loggedIn"));
+      // router.push("/");
+    },
+    logout() {
+      localStorage.removeItem("loggedIn");
+      router.push("/login");
     },
   },
 };
